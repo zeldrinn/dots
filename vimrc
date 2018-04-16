@@ -34,6 +34,9 @@ Plugin 'kamwitsta/mythos'
 " Fuzzy find files
 Plugin 'kien/ctrlp.vim'
 
+" File system explorer
+Plugin 'scrooloose/nerdtree'
+
 " =================================================
 
 " Turn off vundle
@@ -74,3 +77,14 @@ noremap <Up>    <NOP>
 noremap <Down>  <NOP>
 noremap <Left>  <NOP>
 noremap <Right> <NOP>
+
+" Open NERDTree when starting vim
+autocmd VimEnter * NERDTree
+
+" Open NERDTree when starting vim without file
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Open NERDTree when starting vim on a directory
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
