@@ -1,0 +1,25 @@
+shell:
+  program: /bin/zsh
+  args:
+    - -l
+    - -c
+    - "tmux attach || tmux"
+
+window:
+  padding:
+    x: 6
+    y: 6
+
+font:
+  size: 12
+
+  offset:
+    y: 10
+
+  glyph_offset:
+    y: 5
+
+colors:
+  primary:
+    foreground: '#ffffff'
+
