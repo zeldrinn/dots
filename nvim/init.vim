@@ -9,12 +9,15 @@ call plug#begin("~/.vim/plugged")
  Plug 'scrooloose/nerdtree'
  Plug 'preservim/nerdcommenter'
  Plug 'mhinz/vim-startify'
- Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+ Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
  Plug 'neovim/nvim-lspconfig'
  Plug 'nvim-lua/plenary.nvim'
  Plug 'nvim-telescope/telescope.nvim'
  Plug 'BurntSushi/ripgrep'
  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+ Plug 'itchyny/lightline.vim'
+ Plug 'edkolev/tmuxline.vim'
 call plug#end()
 
 " =================================================
@@ -30,6 +33,8 @@ filetype plugin indent on
 
 " Define color scheme
 "colorscheme nord
+
+let g:lightline = {'colorscheme': 'powerline'}
 
 " Remap leader key
 let mapleader = ";"
@@ -55,9 +60,16 @@ set relativenumber
 " Renders line at cursor row
 set cursorline
 
+" Hide mode info as lightline shows it
+set noshowmode
+
 " Old habits die hard
 noremap <Up>    <NOP>
 noremap <Down>  <NOP>
 noremap <Left>  <NOP>
 noremap <Right> <NOP>
 nnoremap <Space> <NOP>
+
+" Hotkey to reload vim config
+nnoremap <silent> <Leader><Leader> :source $MYVIMRC<cr>
+
