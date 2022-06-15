@@ -11,6 +11,8 @@ call plug#begin("~/.vim/plugged")
  Plug 'mhinz/vim-startify'
  Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+ Plug 'zchee/deoplete-jedi'
  Plug 'neovim/nvim-lspconfig'
  Plug 'nvim-lua/plenary.nvim'
  Plug 'nvim-telescope/telescope.nvim'
@@ -34,7 +36,14 @@ filetype plugin indent on
 " Define color scheme
 "colorscheme nord
 
+" Configure lightline theme
 let g:lightline = {'colorscheme': 'powerline'}
+
+" Configure tmuxline theme
+let g:tmuxline_preset = 'nightly_fox'
+
+" Initialize Deoplete (auto-completion)
+let g:deoplete#enable_at_startup = 1
 
 " Remap leader key
 let mapleader = ";"
