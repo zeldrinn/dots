@@ -1,0 +1,41 @@
+shell:
+  program: /bin/zsh
+  args:
+    - -l
+    - -c
+    - "tmux attach || tmux"
+
+window:
+  padding:
+    x: 6
+    y: 6
+
+font:
+  size: 12
+ 
+  normal:
+    family: MesloLGM Nerd Font Mono
+    style: Regular
+
+  bold:
+    family: MesloLGM Nerd Font Mono
+    style: Bold
+
+  italic:
+    family: MesloLGM Nerd Font Mono
+    style: Italic
+
+  bold_italic:
+    family: MesloLGM Nerd Font Mono
+    style: Bold Italic
+
+  offset:
+    y: 10
+
+  glyph_offset:
+    y: 5
+
+colors:
+  primary:
+    foreground: '#ffffff'
+
