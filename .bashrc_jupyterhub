@@ -113,32 +113,14 @@ cursor() {
     local arch=$(uname -m)
     case "$arch" in
         x86_64|amd64)
-            ~/.local/bin-x64/cursor-x64 "$@"
+            ~/.local/bin/cursor-x64 "$@"
             ;;
         aarch64|arm64)
-            ~/.local/bin-arm64/cursor-arm64 "$@"
+            ~/.local/bin/cursor-arm64 "$@"
             ;;
         *)
             echo "Unsupported architecture: $arch"
             echo "Available binaries: cursor-x64, cursor-arm64"
-            return 1
-            ;;
-    esac
-}
-
-# Git - Architecture-aware binary selection
-git() {
-    local arch=$(uname -m)
-    case "$arch" in
-        x86_64|amd64)
-            GIT_EXEC_PATH=~/.local/lib/git-core-x64 ~/.local/bin-x64/git "$@"
-            ;;
-        aarch64|arm64)
-            GIT_EXEC_PATH=~/.local/lib/git-core-arm64 ~/.local/bin-arm64/git "$@"
-            ;;
-        *)
-            echo "Unsupported architecture: $arch"
-            echo "Available binaries: git (x64), git (arm64)"
             return 1
             ;;
     esac
