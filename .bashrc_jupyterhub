@@ -1,0 +1,271 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+
+# ============================================================================
+# PATH Configuration
+# ============================================================================
+export PATH="$HOME/.local/bin:$PATH"
+
+# ============================================================================
+# History Configuration
+# ============================================================================
+# Don't put duplicate lines or lines starting with space in the history
+HISTCONTROL=ignoreboth
+
+# Append to the history file, don't overwrite it
+shopt -s histappend
+
+# Set history length
+HISTSIZE=10000
+HISTFILESIZE=20000
+
+# Save multi-line commands as one command
+shopt -s cmdhist
+
+# ============================================================================
+# Shell Options
+# ============================================================================
+# Check the window size after each command and update LINES and COLUMNS
+shopt -s checkwinsize
+
+# Enable recursive globbing with **
+shopt -s globstar
+
+# Case-insensitive globbing (used in pathname expansion)
+shopt -s nocaseglob
+
+# ============================================================================
+# Colors and Prompt
+# ============================================================================
+# Enable color support for ls and add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# Colorful prompt with git branch info and python version
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(🔀 \1)/'
+}
+
+get_python_version() {
+    python3 --version 2>/dev/null | sed 's/Python /🐍 /' || echo ""
+}
+
+# Set a colorful prompt with user@host:path git_branch python_version $
+PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(parse_git_branch)\[\033[01;33m\][$(get_python_version)]\[\033[00m\]\$ '
+
+# ============================================================================
+# Useful Aliases
+# ============================================================================
+# Enhanced ls commands
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias lh='ls -lah'
+alias lt='ls -ltr'  # Sort by time, newest last
+alias lS='ls -lSr'  # Sort by size, largest last
+
+# Directory navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ~='cd ~'
+alias -- -='cd -'
+
+# Safety aliases
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Git shortcuts
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline'
+alias gd='git diff'
+alias gb='git branch'
+alias gco='git checkout'
+
+# System information
+alias df='df -h'
+alias du='du -h'
+alias free='free -h'
+alias ps='ps aux'
+alias top='top -o %CPU'
+
+# Network
+alias ping='ping -c 5'
+alias ports='netstat -tulanp'
+
+# Python/Development
+alias py='python3'
+alias pip='pip3'
+alias venv='python3 -m venv'
+alias serve='python3 -m http.server'
+
+# Cursor Editor - Architecture-aware binary selection
+cursor() {
+    local arch=$(uname -m)
+    case "$arch" in
+        x86_64|amd64)
+            ~/.local/bin-x64/cursor-x64 "$@"
+            ;;
+        aarch64|arm64)
+            ~/.local/bin-arm64/cursor-arm64 "$@"
+            ;;
+        *)
+            echo "Unsupported architecture: $arch"
+            echo "Available binaries: cursor-x64, cursor-arm64"
+            return 1
+            ;;
+    esac
+}
+
+# Git - Architecture-aware binary selection
+git() {
+    local arch=$(uname -m)
+    case "$arch" in
+        x86_64|amd64)
+            GIT_EXEC_PATH=~/.local/lib/git-core-x64 ~/.local/bin-x64/git "$@"
+            ;;
+        aarch64|arm64)
+            GIT_EXEC_PATH=~/.local/lib/git-core-arm64 ~/.local/bin-arm64/git "$@"
+            ;;
+        *)
+            echo "Unsupported architecture: $arch"
+            echo "Available binaries: git (x64), git (arm64)"
+            return 1
+            ;;
+    esac
+}
+
+# Quick file operations
+alias grep='grep -n --color=auto'
+alias mkdir='mkdir -pv'
+alias wget='wget -c'
+alias curl='curl -L'
+
+# ============================================================================
+# Useful Functions
+# ============================================================================
+# Create directory and cd into it
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Extract various archive formats
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# Find files by name
+ff() {
+    find . -type f -name "*$1*" 2>/dev/null
+}
+
+# Find directories by name
+fd() {
+    find . -type d -name "*$1*" 2>/dev/null
+}
+
+# Search for text in files
+search() {
+    if [ $# -eq 0 ]; then
+        echo "Usage: search <pattern> [directory]"
+        return 1
+    fi
+    local pattern="$1"
+    local dir="${2:-.}"
+    grep -r --color=auto "$pattern" "$dir"
+}
+
+# Quick backup function
+backup() {
+    if [ $# -eq 0 ]; then
+        echo "Usage: backup <file_or_directory>"
+        return 1
+    fi
+    cp -r "$1" "$1.backup.$(date +%Y%m%d_%H%M%S)"
+    echo "Backup created: $1.backup.$(date +%Y%m%d_%H%M%S)"
+}
+
+# Show PATH in a readable format
+path() {
+    echo "$PATH" | tr ':' '\n' | nl
+}
+
+# ============================================================================
+# Environment Variables
+# ============================================================================
+# Set default editor
+export EDITOR=vim
+export VISUAL=vim
+
+# Less options for better paging
+export LESS='-R -i -w -M -z-4'
+
+# Colored man pages
+export LESS_TERMCAP_mb=$'\e[1;32m'
+export LESS_TERMCAP_md=$'\e[1;32m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[01;33m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[1;4;31m'
+
+# ============================================================================
+# Completion and Input
+# ============================================================================
+# Enable programmable completion features
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+# Bind keys for better history search
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
+# ============================================================================
+# Welcome Message
+# ============================================================================
+# Show system info on login
+if [ -t 1 ]; then
+    echo "Welcome to $(hostname)!"
+    echo "Today is $(date)"
+    echo "Uptime: $(uptime -p 2>/dev/null || uptime)"
+    echo ""
+fi
+
+# ============================================================================
+# Load additional configurations
+# ============================================================================
+# Source local bashrc if it exists
+if [ -f ~/.bashrc.local ]; then
+    . ~/.bashrc.local
+fi
