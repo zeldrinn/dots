@@ -48,11 +48,8 @@ eval "$(hub alias -s)"
 export GOPATH="$HOME/go"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 alias ggovm="$GOPATH/bin/g"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 
-# Set up shell for pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# Set up shell for uv
+export PATH="$HOME/.local/bin:$PATH"
 
 # Set up shell for nvm
 export NVM_DIR="$HOME/.nvm"

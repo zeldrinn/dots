@@ -1,0 +1,34 @@
+[shell]
+program = "/bin/zsh"
+args = ["-l", "-c", "tmux attach || tmux"]
+
+[window]
+padding = { x = 6, y = 6 }
+
+[font]
+size = 12
+
+[font.normal]
+family = "MesloLGM Nerd Font Mono"
+style = "Regular"
+
+[font.bold]
+family = "MesloLGM Nerd Font Mono"
+style = "Bold"
+
+[font.italic]
+family = "MesloLGM Nerd Font Mono"
+style = "Italic"
+
+[font.bold_italic]
+family = "MesloLGM Nerd Font Mono"
+style = "Bold Italic"
+
+[font.offset]
+y = 10
+
+[font.glyph_offset]
+y = 5
+
+[colors.primary]
+foreground = "#ffffff"
