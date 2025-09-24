@@ -1,4 +1,4 @@
-[shell]
+[terminal.shell]
 program = "/bin/zsh"
 args = ["-l", "-c", "tmux attach || tmux"]
 
@@ -32,3 +32,10 @@ y = 5
 
 [colors.primary]
 foreground = "#ffffff"
+
+[scrolling]
+history = 20000          # Alacritty’s own scrollback
+multiplier = 3           # speed up wheel/trackpad scrolling
+
+[mouse]
+hide_when_typing = true
